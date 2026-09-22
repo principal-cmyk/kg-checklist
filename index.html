@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<title>KG Checklist · Silverleaf Academy</title>
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./icon-180.png">
+<meta name="theme-color" content="#002368">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="KG Checklist">
+<style>
+:root{
+  --eb:#002368; --lb:#80BFEC; --lb30:#D9ECF9; --eb50:#8091B3; --silver:#818283;
+  --silver15:#ECECEC; --gold:#FFC952; --gold15:#FFF7E5; --ink:#1a1a1a;
+  --red:#F54A40; --redbg:#FBE9E7; --green:#2C7A39; --greenbg:#E5F3E7;
+  --head:'Montserrat','Trebuchet MS',-apple-system,'Segoe UI',Roboto,sans-serif;
+  --body:Georgia,'Times New Roman',serif;
+  --sat:env(safe-area-inset-top,0px); --sab:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box} html,body{margin:0;padding:0}
+body{font-family:var(--body);color:var(--ink);background:#F6F8FB;-webkit-text-size-adjust:100%}
+button{font-family:var(--head);cursor:pointer}
+input,select,textarea{font-family:var(--body);font-size:16px;padding:11px 12px;border:1.5px solid #C8D4E8;border-radius:10px;width:100%;background:#fff;color:var(--ink)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--eb)}
+label{display:block;font-family:var(--head);font-weight:600;font-size:12.5px;color:var(--eb);margin:14px 0 5px}
+.bar{position:sticky;top:0;z-index:20;background:var(--eb);color:#fff;padding:calc(10px + var(--sat)) 14px 10px;display:flex;align-items:center;gap:10px;min-height:54px}
+.bar h1{font-family:var(--head);font-size:17px;margin:0;font-weight:700;flex:1;line-height:1.25}
+.bar .sub{font-size:11px;color:var(--lb);font-family:var(--head);font-weight:600}
+.back{background:none;border:none;color:#fff;font-size:24px;padding:2px 8px 4px 0;line-height:1}
+.wrap{padding:14px 14px calc(30px + var(--sab));max-width:640px;margin:0 auto}
+.card{background:#fff;border-radius:14px;padding:16px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,35,104,.08)}
+.btn{display:block;width:100%;background:var(--eb);color:#fff;border:none;border-radius:12px;padding:14px;font-size:16px;font-weight:700;margin-top:16px}
+.btn.sec{background:var(--lb30);color:var(--eb)}
+.btn.small{width:auto;display:inline-block;padding:9px 16px;font-size:13.5px;margin-top:0}
+.btn:disabled{opacity:.5}
+.pill{display:inline-block;font-family:var(--head);font-weight:700;font-size:11px;padding:3px 10px;border-radius:99px}
+.pill.ok{background:var(--greenbg);color:var(--green)} .pill.pending{background:var(--gold15);color:#8a6d1a}
+.pill.band{background:var(--lb30);color:var(--eb)}
+.stItem{display:flex;align-items:center;gap:12px;padding:14px 4px;border-bottom:1px solid var(--silver15)}
+.stItem:last-child{border-bottom:none}
+.avatar{width:42px;height:42px;border-radius:50%;background:var(--lb30);color:var(--eb);font-family:var(--head);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:16px;flex:none}
+.stItem .nm{font-family:var(--head);font-weight:700;font-size:15px;color:var(--eb)}
+.stItem .meta{font-size:12.5px;color:var(--silver)}
+.grow{flex:1;min-width:0}
+.chev{color:var(--eb50);font-size:20px}
+.netbar{font-family:var(--head);font-size:12px;font-weight:600;text-align:center;padding:7px;border-radius:10px;margin-bottom:12px}
+.netbar.on{background:var(--greenbg);color:var(--green)} .netbar.off{background:var(--silver15);color:var(--silver)}
+.netbar.pend{background:var(--gold15);color:#8a6d1a}
+h2.sec{font-family:var(--head);font-size:13px;color:var(--eb);letter-spacing:.06em;text-transform:uppercase;margin:20px 2px 8px}
+.dom{display:flex;align-items:center;gap:12px;padding:13px 4px;border-bottom:1px solid var(--silver15)}
+.dom .ic{width:38px;height:38px;border-radius:10px;background:var(--eb);color:#fff;font-family:var(--head);font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;flex:none}
+.prog{font-family:var(--head);font-weight:700;font-size:13px;color:var(--eb)}
+.item{padding:14px 0;border-bottom:1px solid var(--silver15)}
+.item .no{font-family:var(--head);font-weight:800;color:var(--eb);margin-right:8px}
+.item .skill{font-size:15.5px;line-height:1.4}
+.proc{font-size:13.5px;color:#444;background:var(--silver15);border-radius:10px;padding:10px 12px;margin-top:9px;white-space:pre-wrap;line-height:1.45}
+.procBtn{background:none;border:none;color:var(--eb);font-family:var(--head);font-weight:700;font-size:12px;padding:6px 0 0}
+.marks{display:flex;gap:10px;margin-top:10px}
+.mk{flex:1;border:2px solid #C8D4E8;background:#fff;border-radius:12px;padding:11px;font-size:19px;font-weight:800;color:var(--silver)}
+.mk.y.sel{background:var(--eb);border-color:var(--eb);color:#fff}
+.mk.n.sel{background:var(--gold15);border-color:var(--gold);color:#8a6d1a}
+.cmt{margin-top:10px}
+.secHead{font-family:var(--head);font-weight:700;font-size:12px;color:var(--eb);background:var(--lb30);border-radius:8px;padding:7px 12px;margin-top:16px;letter-spacing:.05em;text-transform:uppercase}
+table.sc{width:100%;border-collapse:collapse;font-size:13.5px}
+table.sc th{font-family:var(--head);font-size:11px;color:#fff;background:var(--eb);padding:8px 6px;text-align:left}
+table.sc td{padding:9px 6px;border-bottom:1px solid var(--silver15)}
+td.num{font-family:var(--head);font-weight:700;text-align:center}
+.int{font-size:11.5px;font-family:var(--head);font-weight:600;padding:2px 8px;border-radius:99px;white-space:nowrap}
+.i-avg{background:var(--lb30);color:var(--eb)} .i-sl{background:var(--gold15);color:#8a6d1a}
+.i-sig{background:var(--redbg);color:#a5372e} .i-adv{background:var(--greenbg);color:var(--green)}
+.bignum{font-family:var(--head);font-weight:800;font-size:40px;color:var(--eb);text-align:center}
+.tabs{display:flex;gap:6px;margin-bottom:14px}
+.tab{flex:1;font-family:var(--head);font-weight:700;font-size:13px;padding:10px 4px;border-radius:10px;border:none;background:#fff;color:var(--eb50)}
+.tab.sel{background:var(--eb);color:#fff}
+.hint{font-size:12.5px;color:var(--silver);font-style:italic;line-height:1.45;margin-top:8px}
+.logoRow{display:flex;justify-content:center;margin:26px 0 8px}
+.err{color:var(--red);font-family:var(--head);font-size:13px;font-weight:600;margin-top:10px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(24px + var(--sab));background:var(--eb);color:#fff;font-family:var(--head);font-weight:600;font-size:13.5px;padding:11px 20px;border-radius:99px;box-shadow:0 4px 14px rgba(0,0,0,.25);z-index:99;opacity:0;transition:opacity .3s;pointer-events:none;max-width:86vw;text-align:center}
+.toast.show{opacity:1}
+.fab{position:fixed;right:18px;bottom:calc(20px + var(--sab));background:var(--gold);color:var(--eb);border:none;border-radius:99px;font-size:15px;font-family:var(--head);font-weight:800;padding:14px 20px;box-shadow:0 4px 12px rgba(0,0,0,.25);z-index:30}
+.empty{text-align:center;color:var(--silver);padding:36px 12px;font-style:italic}
+.assessRow{display:flex;gap:8px;align-items:flex-end}
+.assessRow>div{flex:1}
+.warn{background:var(--gold15);border:1px solid var(--gold);border-radius:10px;padding:10px 12px;font-size:13px;margin-top:12px;line-height:1.45}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast" class="toast"></div>
+<script src="./data.js"></script>
+<script>
+"use strict";
+const D = window.KG_DATA;
+const $ = (id)=>document.getElementById(id);
+const APP = $("app");
+const SYNC_URL = (location.origin.includes("supabase") ? location.origin : "https://xgmqfkytrxqlosspqsjo.supabase.co") + "/functions/v1/kg-sync";
+
+/* ---------- state ---------- */
+let S = load();
+function load(){
+  try{ const raw = localStorage.getItem("kg_state"); if(raw) return JSON.parse(raw); }catch(e){}
+  return { device:null, students:[] };
+}
+function save(){ try{ localStorage.setItem("kg_state", JSON.stringify(S)); }catch(e){ toast("⚠️ Could not save — storage full?"); } }
+function uuid(){ return (crypto.randomUUID)? crypto.randomUUID() : 'xx-4x-yx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return (c=='x'?r:(r&0x3|0x8)).toString(16)})+Date.now(); }
+function touch(st){ st.updated_at = new Date().toISOString(); st.sync = "pending"; save(); renderNet(); }
+
+/* ---------- age & scoring ---------- */
+function ageParts(dob, test){
+  if(!dob||!test) return null;
+  const a=new Date(dob), b=new Date(test);
+  if(isNaN(a)||isNaN(b)||b<a) return null;
+  let months=(b.getFullYear()-a.getFullYear())*12+(b.getMonth()-a.getMonth());
+  if(b.getDate()<a.getDate()) months--;
+  return { months, y:Math.floor(months/12), m:months%12 };
+}
+function bandOf(months){ if(months>=37&&months<=48)return "A"; if(months>=49&&months<=60)return "B"; if(months>=61&&months<=71)return "C"; return null; }
+function rawScore(st,k,dk){ const mk=(st.marks&&st.marks[k])||{}; const dom=D.domains.find(d=>d.key===dk); let c=0; dom.items.forEach(it=>{ if(mk[dk+"."+it.n]==="y") c++; }); return c; }
+function domDone(st,k,dk){ const mk=(st.marks&&st.marks[k])||{}; const dom=D.domains.find(d=>d.key===dk); let c=0; dom.items.forEach(it=>{ const v=mk[dk+"."+it.n]; if(v==="y"||v==="n") c++; }); return c; }
+function scaledOf(band,dk,raw){ const t=D.scaled[band]; return t&&t[dk]&&t[dk][raw]!==undefined? t[dk][raw]:null; }
+function interpScaled(s){ if(s<=3)return["Significant delay","i-sig"]; if(s<=6)return["Slight delay","i-sl"]; if(s<=13)return["Average","i-avg"]; if(s<=16)return["Slightly advanced","i-adv"]; return["Highly advanced","i-adv"]; }
+function interpStd(v){ if(v<=69)return["Significant delay","i-sig"]; if(v<=79)return["Slight delay","i-sl"]; if(v<=119)return["Average","i-avg"]; if(v<=129)return["Slightly advanced","i-adv"]; return["Highly advanced","i-adv"]; }
+function assessment(st,k){ return (st.assessments&&st.assessments[k])||{}; }
+
+/* ---------- sync ---------- */
+let syncing=false;
+function pendingCount(){ return S.students.filter(s=>s.sync!=="synced").length; }
+async function doSync(manual){
+  if(!S.device||syncing) return;
+  if(!navigator.onLine){ if(manual) toast("No internet — will sync when you're back online"); return; }
+  const pend=S.students.filter(s=>s.sync!=="synced");
+  if(!pend.length){ if(manual) toast("Everything is already synced ✓"); return; }
+  syncing=true; renderNet();
+  try{
+    const res=await fetch(SYNC_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+      action:"push", school_code:S.device.code,
+      device:{id:S.device.id,secret:S.device.secret,teacher:S.device.teacher,campus:S.device.campus,class:S.device.class},
+      records:pend.map(st=>({student_key:st.id,student_name:st.name||"",campus:st.campus||S.device.campus,class:st.class||S.device.class,teacher:S.device.teacher,updated_at:st.updated_at||new Date().toISOString(),payload:st}))
+    })});
+    const j=await res.json().catch(()=>({}));
+    if(res.ok&&j.ok){ pend.forEach(st=>st.sync="synced"); save(); toast("Synced "+pend.length+" record"+(pend.length>1?"s":"")+" ✓");
+      const h=document.querySelector(".bar h1"); if(h&&h.textContent.indexOf("My students")===0) homeScreen(); }
+    else if(res.status===403){ toast("⚠️ "+(j.error||"Sync refused — check the school code in Settings")); }
+    else{ toast("⚠️ Sync failed — will retry later"); }
+  }catch(e){ if(manual) toast("⚠️ Could not reach the server — try again later"); }
+  syncing=false; renderNet();
+}
+window.addEventListener("online",()=>{ renderNet(); doSync(false); });
+window.addEventListener("offline",renderNet);
+
+/* ---------- ui helpers ---------- */
+let toastTimer=null;
+function toast(msg){ const t=$("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove("show"),3200); }
+function esc(x){ return String(x==null?"":x).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+const LOGO = '<svg width="46" height="52" viewBox="0 0 46 52"><path fill="#002368" d="M23 0 46 8v18c0 14-9 22-23 26C9 48 0 40 0 26V8Z"/><path fill="#fff" d="M21.5 8h3v36h-3zM23 14 10 8v5l13 6zM23 14l13-6v5l-13 6zM23 24 10 18v5l13 6zM23 24l13-6v5l-13 6zM23 34l-13-6v5l13 6zM23 34l13-6v5l-13 6z"/></svg>';
+function bar(title, sub, back){ return '<div class="bar">'+(back?'<button class="back" onclick="'+back+'">‹</button>':'')+'<h1>'+esc(title)+(sub?'<div class="sub">'+esc(sub)+'</div>':'')+'</h1><div id="netdot"></div></div>'; }
+function netHtml(){
+  if(!navigator.onLine) return '<div class="netbar off">📴 Offline — your work is saved on this phone</div>';
+  const p=pendingCount();
+  if(syncing) return '<div class="netbar pend">↻ Syncing…</div>';
+  if(p) return '<div class="netbar pend" onclick="doSync(true)">🟡 '+p+' record'+(p>1?'s':'')+' waiting to sync — tap to sync now</div>';
+  return '<div class="netbar on">🟢 Online — all records synced</div>';
+}
+function renderNet(){ const el=document.querySelector(".netbar"); if(el) el.outerHTML=netHtml(); }
+function fmtDate(d){ if(!d) return "—"; const x=new Date(d); return isNaN(x)?"—":x.toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"}); }
+
+/* ---------- screens ---------- */
+function go(fn,...a){ window.scrollTo(0,0); fn(...a); }
+
+function setupScreen(){
+  APP.innerHTML = bar("Silverleaf Academy","KG Development Checklist") +
+  '<div class="wrap"><div class="logoRow">'+LOGO+'</div>'+
+  '<div style="text-align:center;font-family:var(--head);font-weight:800;color:var(--eb);font-size:20px">Karibu, teacher!</div>'+
+  '<div class="hint" style="text-align:center;margin-bottom:6px">Set up this phone once. Everything you enter afterwards works offline.</div>'+
+  '<div class="card">'+
+  '<label>School access code</label><input id="f_code" autocapitalize="characters" placeholder="Ask your Head of ECE">'+
+  '<label>Your name</label><input id="f_teacher" placeholder="e.g. Neema Msuya">'+
+  '<label>Campus</label><select id="f_campus">'+D.campuses.map(c=>'<option>'+c+'</option>').join("")+'</select>'+
+  '<label>Class</label><select id="f_class">'+D.classes.map(c=>'<option>'+c+'</option>').join("")+'</select>'+
+  '<div id="setupErr"></div>'+
+  '<button class="btn" onclick="finishSetup()">Start using the checklist</button></div>'+
+  '<div class="hint">There is no pass or fail — this checklist maps each student\'s development across 7 domains so we can support their next steps.</div></div>';
+}
+function finishSetup(){
+  const code=$("f_code").value.trim(), t=$("f_teacher").value.trim();
+  if(!code||!t){ $("setupErr").innerHTML='<div class="err">Please enter the access code and your name.</div>'; return; }
+  S.device={ id:uuid(), secret:uuid(), code:code, teacher:t, campus:$("f_campus").value, class:$("f_class").value };
+  save(); go(homeScreen); doSync(false);
+}
+
+function homeScreen(){
+  const sts=[...S.students].sort((a,b)=>(a.name||"").localeCompare(b.name||""));
+  APP.innerHTML = bar("My students", S.device.teacher+" · "+S.device.campus+" "+S.device.class) +
+  '<div class="wrap">'+netHtml()+
+  (sts.length? '<div class="card">'+sts.map(st=>{
+      const done=D.domains.reduce((acc,d)=>acc+domDone(st,activeAssessment(st),d.key),0);
+      const tot=D.domains.reduce((a,d)=>a+d.items.length,0);
+      return '<div class="stItem" onclick="openStudent(\''+st.id+'\')">'+
+        '<div class="avatar">'+esc((st.name||"?").trim().split(/\s+/).map(w=>w[0]).slice(0,2).join("").toUpperCase())+'</div>'+
+        '<div class="grow"><div class="nm">'+esc(st.name||"Unnamed student")+'</div>'+
+        '<div class="meta">Assessment '+(activeAssessment(st)+1)+' · '+done+'/'+tot+' items · '+
+        (st.sync==="synced"?'<span class="pill ok">synced</span>':'<span class="pill pending">on this phone</span>')+'</div></div>'+
+        '<div class="chev">›</div></div>';
+    }).join("")+'</div>'
+    : '<div class="empty">No students yet.<br>Tap “+ Add student” to create the first record.</div>')+
+  '<button class="btn sec" onclick="settingsScreen()">Settings & sync</button>'+
+  '</div><button class="fab" onclick="newStudent()">+ Add student</button>';
+}
+function activeAssessment(st){
+  for(let k=2;k>=0;k--) if(assessment(st,k).date) return k;
+  return 0;
+}
+function newStudent(){
+  const st={ id:uuid(), name:"", sex:"", dob:"", campus:S.device.campus, class:S.device.class, admission:"",
+    handedness:"", birth_order:"", siblings:"", daycare:"", street:"", ward:"", district:"", region:"Arusha",
+    parent:"", relationship:"", phone:"", languages:"", prev_school:"",
+    assessments:[{},{},{}], marks:[{},{},{}], comments:[{},{},{}], notes:[{},{},{}], sync:"pending",
+    created_at:new Date().toISOString(), updated_at:new Date().toISOString() };
+  S.students.push(st); save(); profileScreen(st.id,true);
+}
+function openStudent(id){ go(studentScreen,id); }
+function stById(id){ return S.students.find(s=>s.id===id); }
+
+function profileScreen(id,isNew){
+  const st=stById(id);
+  const F=(k,lab,ph)=>'<label>'+lab+'</label><input id="p_'+k+'" value="'+esc(st[k])+'" placeholder="'+(ph||'')+'">';
+  const Sel=(k,lab,opts)=>'<label>'+lab+'</label><select id="p_'+k+'">'+["",...opts].map(o=>'<option'+(st[k]===o?' selected':'')+'>'+o+'</option>').join("")+'</select>';
+  APP.innerHTML = bar(isNew?"New student":"Student profile","fill every field you can", isNew?"cancelNew('"+id+"')":"openStudent('"+id+"')")+
+  '<div class="wrap"><div class="card">'+
+  F("name","Student's name","Full name")+
+  Sel("sex","Sex",["Female","Male"])+
+  '<label>Date of birth</label><input type="date" id="p_dob" value="'+esc(st.dob)+'">'+
+  '<div class="hint">Check the date of birth against the admission record — every score depends on it.</div>'+
+  Sel("campus","Campus",D.campuses)+ Sel("class","Class",D.classes)+
+  F("admission","Student / admission number","e.g. SLA-UR-1234")+
+  Sel("handedness","Handedness",["Right","Left","Both","Not yet established"])+
+  Sel("birth_order","Birth order",["1st","2nd","3rd","4th or later"])+
+  F("siblings","Number of siblings","")+ Sel("daycare","Attended day care before?",["Yes","No"])+
+  F("street","Street / village","")+ F("ward","Ward","")+ F("district","District","")+ F("region","Region","")+
+  F("parent","Parent / guardian name","")+ F("relationship","Relationship to student","e.g. Mother")+
+  F("phone","Parent / guardian phone","+255 …")+ F("languages","Home language(s)","e.g. Kiswahili")+
+  F("prev_school","Previous school / day care (if any)","")+
+  '<button class="btn" onclick="saveProfile(\''+id+'\')">Save profile</button></div></div>';
+}
+function cancelNew(id){ S.students=S.students.filter(s=>s.id!==id); save(); go(homeScreen); }
+function saveProfile(id){
+  const st=stById(id);
+  ["name","sex","dob","campus","class","admission","handedness","birth_order","siblings","daycare","street","ward","district","region","parent","relationship","phone","languages","prev_school"]
+    .forEach(k=>{ const el=$("p_"+k); if(el) st[k]=el.value.trim(); });
+  if(!st.name){ toast("Please enter the student's name"); return; }
+  touch(st); go(studentScreen,id); toast("Profile saved ✓");
+}
+
+function studentScreen(id){
+  const st=stById(id); if(!st) return go(homeScreen);
+  const k=st.ui_k!==undefined?st.ui_k:activeAssessment(st);
+  const a=assessment(st,k);
+  const ap=ageParts(st.dob,a.date); const band=ap?bandOf(ap.months):null;
+  const tot=D.domains.reduce((x,d)=>x+d.items.length,0);
+  const done=D.domains.reduce((x,d)=>x+domDone(st,k,d.key),0);
+  APP.innerHTML = bar(st.name||"Student", (st.campus||"")+" "+(st.class||""), "goHome()")+
+  '<div class="wrap">'+netHtml()+
+  '<div class="tabs">'+[0,1,2].map(i=>'<button class="tab'+(i===k?' sel':'')+'" onclick="setK(\''+id+'\','+i+')">Assessment '+(i+1)+'</button>').join("")+'</div>'+
+  '<div class="card"><div class="assessRow">'+
+    '<div><label style="margin-top:0">Date tested</label><input type="date" id="a_date" value="'+esc(a.date||"")+'" onchange="setAssess(\''+id+'\','+k+')"></div>'+
+    '<div><label style="margin-top:0">Examiner</label><input id="a_ex" value="'+esc(a.examiner||S.device.teacher)+'" onchange="setAssess(\''+id+'\','+k+')"></div></div>'+
+  (a.date? (ap? '<div style="margin-top:12px">Age at assessment: <b>'+ap.y+'y '+ap.m+'m</b> &nbsp; '+(band?'<span class="pill band">Band '+band+' · '+D.bands[band]+'</span>':'<span class="pill i-sig int">Outside 3y1m–5y11m — cannot be scored</span>')+'</div>'
+        : '<div class="warn">Enter the student\'s date of birth on the profile to calculate the age.</div>')
+    : '<div class="warn">Enter the date tested to activate scoring for this assessment.</div>')+
+  '</div>'+
+  '<h2 class="sec">Domains · '+done+'/'+tot+' items marked</h2><div class="card">'+
+  D.domains.map(d=>{
+    const dn=domDone(st,k,d.key);
+    return '<div class="dom" onclick="go(domainScreen,\''+id+'\','+k+',\''+d.key+'\')">'+
+    '<div class="ic">'+d.key+'</div><div class="grow"><div class="nm" style="font-family:var(--head);font-weight:700;color:var(--eb);font-size:14.5px">'+d.name+'</div>'+
+    '<div class="meta" style="font-size:12px;color:var(--silver)">'+d.items.length+' items</div></div>'+
+    '<div class="prog">'+dn+'/'+d.items.length+'</div><div class="chev">›</div></div>';
+  }).join("")+'</div>'+
+  '<button class="btn" onclick="go(scoresScreen,\''+id+'\')">📊 View scores & interpretation</button>'+
+  '<button class="btn sec" onclick="go(notesScreen,\''+id+'\','+k+')">📝 Examiner notes</button>'+
+  '<button class="btn sec" onclick="profileScreen(\''+id+'\')">👤 Edit profile</button>'+
+  '</div>';
+}
+function goHome(){ go(homeScreen); }
+function setK(id,i){ const st=stById(id); st.ui_k=i; save(); studentScreen(id); }
+function setAssess(id,k){ const st=stById(id); if(!st.assessments)st.assessments=[{},{},{}];
+  st.assessments[k]={ date:$("a_date").value, examiner:$("a_ex").value.trim() }; touch(st); studentScreen(id); }
+
+function domainScreen(id,k,dk){
+  const st=stById(id); const d=D.domains.find(x=>x.key===dk);
+  const mk=(st.marks&&st.marks[k])||{};
+  const cm=(st.comments&&st.comments[k])||{};
+  const secs=d.sections||{};
+  APP.innerHTML = bar(d.title, st.name+" · Assessment "+(k+1), "openStudent('"+id+"')")+
+  '<div class="wrap"><div class="card">'+
+  d.items.map(it=>{
+    const key=dk+"."+it.n, v=mk[key]||"";
+    return (secs[it.n]?'<div class="secHead">'+esc(secs[it.n])+'</div>':'')+
+    '<div class="item"><div class="skill"><span class="no">'+it.n+'</span>'+esc(it.skill)+'</div>'+
+    (it.proc?'<button class="procBtn" onclick="this.nextElementSibling.hidden=!this.nextElementSibling.hidden">▸ Materials / procedure</button><div class="proc" hidden>'+esc(it.proc)+'</div>':'')+
+    '<div class="marks">'+
+    '<button class="mk y'+(v==="y"?' sel':'')+'" onclick="mark(\''+id+'\','+k+',\''+key+'\',\'y\')">✓ Present</button>'+
+    '<button class="mk n'+(v==="n"?' sel':'')+'" onclick="mark(\''+id+'\','+k+',\''+key+'\',\'n\')">– Not yet</button></div>'+
+    '<div class="cmt"><input placeholder="Comment (optional)" value="'+esc(cm[key]||"")+'" onchange="comment(\''+id+'\','+k+',\''+key+'\',this.value)"></div>'+
+    '</div>';
+  }).join("")+
+  (d.note?'<div class="hint">'+esc(d.note)+'</div>':'')+
+  '<div style="margin-top:14px"><b class="prog" id="domtot">Total: '+rawScore(st,k,dk)+' / '+d.max+'</b></div>'+
+  '<button class="btn sec" onclick="openStudent(\''+id+'\')">Done — back to '+esc(st.name||"student")+'</button>'+
+  '</div><div class="hint">Mark ✓ if the behaviour is present, – if not yet. Tried-but-failed is “– not yet”. Never coach the answer — the checklist is repeated later.</div></div>';
+}
+function mark(id,k,key,val){
+  const st=stById(id); if(!st.marks)st.marks=[{},{},{}];
+  st.marks[k][key] = (st.marks[k][key]===val? "": val);
+  touch(st);
+  const dk=key.split(".")[0]; const d=D.domains.find(x=>x.key===dk);
+  // update buttons in place
+  const btns=event.target.parentElement.querySelectorAll(".mk"); const v=st.marks[k][key];
+  btns[0].className="mk y"+(v==="y"?" sel":""); btns[1].className="mk n"+(v==="n"?" sel":"");
+  $("domtot").textContent="Total: "+rawScore(st,k,dk)+" / "+d.max;
+}
+function comment(id,k,key,val){ const st=stById(id); if(!st.comments)st.comments=[{},{},{}]; st.comments[k][key]=val; touch(st); }
+
+function scoresScreen(id){
+  const st=stById(id);
+  const cols=[0,1,2].filter(k=>assessment(st,k).date);
+  APP.innerHTML = bar("Scores & Development Index", st.name, "openStudent('"+id+"')")+
+  '<div class="wrap">'+
+  (cols.length? cols.map(k=>{
+    const a=assessment(st,k); const ap=ageParts(st.dob,a.date); const band=ap?bandOf(ap.months):null;
+    let sum=0, all=true, rows="";
+    D.domains.forEach(d=>{
+      const raw=rawScore(st,k,d.key);
+      const sc=band? scaledOf(band,d.key,raw):null;
+      if(sc==null) all=false; else sum+=sc;
+      const int=sc!=null?interpScaled(sc):null;
+      rows+='<tr><td>'+d.name+'<div style="font-size:11px;color:var(--silver)">max '+d.max+'</div></td><td class="num">'+raw+'</td><td class="num">'+(sc!=null?sc:"—")+'</td><td>'+(int?'<span class="int '+int[1]+'">'+int[0]+'</span>':"—")+'</td></tr>';
+    });
+    const unmarked=D.domains.reduce((x,d)=>x+(d.items.length-domDone(st,k,d.key)),0);
+    let overall="";
+    if(!band){ overall='<div class="warn">Age at this assessment is outside 3y1m–5y11m, so the conversion tables do not apply.</div>'; }
+    else if(all){
+      const std = sum<29? "<37" : (sum>98? ">138" : D.standard[sum]);
+      const iv = (typeof std==="number")? interpStd(std) : (std==="<37"?["Significant delay","i-sig"]:["Highly advanced","i-adv"]);
+      overall='<div style="display:flex;gap:10px;margin-top:14px"><div class="card grow" style="margin:0"><div class="bignum">'+sum+'</div><div style="text-align:center;font-family:var(--head);font-size:11.5px;font-weight:700;color:var(--eb)">SUM OF SCALED</div></div>'+
+      '<div class="card grow" style="margin:0;background:var(--gold15)"><div class="bignum">'+std+'</div><div style="text-align:center;font-family:var(--head);font-size:11.5px;font-weight:700;color:var(--eb)">DEVELOPMENT INDEX</div></div></div>'+
+      '<div style="text-align:center;margin-top:10px"><span class="int '+iv[1]+'" style="font-size:14px;padding:6px 16px">'+iv[0]+'</span></div>'+
+      (unmarked? '<div class="warn">'+unmarked+' item'+(unmarked>1?"s are":" is")+' still unmarked — unmarked items count as “not yet”, so scores may rise once you finish.</div>':"");
+    } else overall='<div class="warn">Complete all 7 domains to get the Development Index.</div>';
+    return '<div class="card"><div style="font-family:var(--head);font-weight:800;color:var(--eb);margin-bottom:4px">Assessment '+(k+1)+' · '+fmtDate(a.date)+(ap?' · '+ap.y+'y '+ap.m+'m'+(band?' · Band '+band:''):"")+'</div>'+
+      '<table class="sc"><tr><th>Domain</th><th>Raw</th><th>Scaled</th><th>Interpretation</th></tr>'+rows+'</table>'+overall+'</div>';
+  }).join("") : '<div class="empty">Enter a “date tested” on an assessment first.</div>')+
+  '<div class="hint">Scaled 1–19 (mean 10): 1–3 significant delay · 4–6 slight · 7–13 average · 14–16 slightly advanced · 17–19 highly advanced. Development Index (mean 100): ≤69 · 70–79 · 80–119 · 120–129 · ≥130. A delay result means: support, re-test in 3–6 months, and talk with your Head of ECE — it is a screening signal, not a diagnosis.</div></div>';
+}
+
+function notesScreen(id,k){
+  const st=stById(id); const n=(st.notes&&st.notes[k])||{};
+  const T=(key,lab)=>'<label>'+lab+'</label><textarea rows="3" id="n_'+key+'">'+esc(n[key]||"")+'</textarea>';
+  APP.innerHTML = bar("Examiner notes", st.name+" · Assessment "+(k+1), "openStudent('"+id+"')")+
+  '<div class="wrap"><div class="card">'+
+  T("place","Place where the assessment was administered")+
+  T("background","Student's background (behaviour, health)")+
+  T("family","Family environment")+
+  T("stimulating","What parents do at home to support development")+
+  T("home","Home environment")+
+  T("other","Other observations")+
+  T("followup","Follow-up actions agreed with the parent/caregiver")+
+  '<button class="btn" onclick="saveNotes(\''+id+'\','+k+')">Save notes</button></div></div>';
+}
+function saveNotes(id,k){ const st=stById(id); if(!st.notes)st.notes=[{},{},{}];
+  const o={}; ["place","background","family","stimulating","home","other","followup"].forEach(x=>o[x]=$("n_"+x).value);
+  st.notes[k]=o; touch(st); openStudent(id); toast("Notes saved ✓"); }
+
+function settingsScreen(){
+  const d=S.device;
+  APP.innerHTML = bar("Settings & sync","", "goHome()")+
+  '<div class="wrap">'+netHtml()+
+  '<div class="card"><label style="margin-top:0">Teacher</label><input id="s_teacher" value="'+esc(d.teacher)+'">'+
+  '<label>Campus</label><select id="s_campus">'+D.campuses.map(c=>'<option'+(d.campus===c?' selected':'')+'>'+c+'</option>').join("")+'</select>'+
+  '<label>Class</label><select id="s_class">'+D.classes.map(c=>'<option'+(d.class===c?' selected':'')+'>'+c+'</option>').join("")+'</select>'+
+  '<label>School access code</label><input id="s_code" value="'+esc(d.code)+'">'+
+  '<button class="btn small" onclick="saveSettings()">Save</button></div>'+
+  '<div class="card"><div style="font-family:var(--head);font-weight:700;color:var(--eb)">Sync</div>'+
+  '<div class="hint">Records sync automatically whenever this phone is online. Nothing is ever deleted from this phone by syncing.</div>'+
+  '<button class="btn" onclick="doSync(true)">Sync now</button></div>'+
+  '<div class="hint">Device ID: '+esc(d.id)+'<br>App version 1.0 · Silverleaf Academy · The records on this phone contain personal information about students — keep your phone locked.</div></div>';
+}
+function saveSettings(){ const d=S.device; d.teacher=$("s_teacher").value.trim(); d.campus=$("s_campus").value; d.class=$("s_class").value; d.code=$("s_code").value.trim(); save(); toast("Saved ✓"); goHome(); }
+
+/* ---------- boot ---------- */
+if("serviceWorker" in navigator){ navigator.serviceWorker.register("./sw.js").catch(()=>{}); }
+if(S.device) homeScreen(); else setupScreen();
+setInterval(()=>{ if(navigator.onLine && pendingCount() && !syncing) doSync(false); }, 60000);
+</script>
+</body>
+</html>
