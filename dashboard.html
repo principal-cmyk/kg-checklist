@@ -1,0 +1,664 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>KG Checklist Dashboard · Silverleaf Academy</title>
+<link rel="icon" href="./icon-192.png">
+<link rel="apple-touch-icon" href="./icon-180.png">
+<meta name="theme-color" content="#002368">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --eb:#002368; --lb:#80BFEC; --gold:#FFC952;
+  --head:'Montserrat','Trebuchet MS',-apple-system,'Segoe UI',Roboto,sans-serif;
+  --body:Georgia,'Times New Roman',serif;
+  --bg:#F4F6FA; --surface:#FCFCFB; --card:#FFFFFF; --line:#E3E7EE; --line2:#EEF1F5;
+  --ink:#16202F; --ink2:#4A5566; --muted:#7A8494; --accent:#002368; --accent-soft:#E6EEF8;
+  --gold-soft:#FFF4D9; --gold-ink:#7A5A0E; --warn-ink:#8A3D06; --warn-soft:#FBEDE2;
+  --track:#E6EEF8;
+  /* diverging scale: delay (warm) ← average (neutral) → advanced (cool) — validated light */
+  --c-sig:#9A4A0C; --c-sl:#D99A2B; --c-avg:#A9AFB8; --c-adv1:#5FA8DE; --c-adv2:#002368;
+  --t-sig:#FFFFFF; --t-sl:#16202F; --t-avg:#16202F; --t-adv1:#16202F; --t-adv2:#FFFFFF;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E131B; --surface:#141A24; --card:#141A24; --line:#2A3342; --line2:#1F2733;
+    --ink:#E8ECF2; --ink2:#B4BDCB; --muted:#8792A3; --accent:#93C6EF; --accent-soft:#1C2A3E;
+    --gold-soft:#2E2715; --gold-ink:#F0C870; --warn-ink:#F0B44A; --warn-soft:#2F2214; --track:#243246;
+    --c-sig:#F0B44A; --c-sl:#A8661A; --c-avg:#5B6370; --c-adv1:#3D78B0; --c-adv2:#93C6EF;
+    --t-sig:#141A24; --t-sl:#FFFFFF; --t-avg:#FFFFFF; --t-adv1:#FFFFFF; --t-adv2:#141A24;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E131B; --surface:#141A24; --card:#141A24; --line:#2A3342; --line2:#1F2733;
+  --ink:#E8ECF2; --ink2:#B4BDCB; --muted:#8792A3; --accent:#93C6EF; --accent-soft:#1C2A3E;
+  --gold-soft:#2E2715; --gold-ink:#F0C870; --warn-ink:#F0B44A; --warn-soft:#2F2214; --track:#243246;
+  --c-sig:#F0B44A; --c-sl:#A8661A; --c-avg:#5B6370; --c-adv1:#3D78B0; --c-adv2:#93C6EF;
+  --t-sig:#141A24; --t-sl:#FFFFFF; --t-avg:#FFFFFF; --t-adv1:#FFFFFF; --t-adv2:#141A24;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--head);font-size:14px;line-height:1.45;-webkit-text-size-adjust:100%}
+button,select,input{font-family:var(--head);font-size:14px;color:var(--ink)}
+.hidden{display:none !important}
+
+/* header */
+.top{background:#002368;color:#fff}
+.top .in{max-width:1180px;margin:0 auto;padding:14px 16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.top img{height:34px;width:auto;display:block}
+.top .ttl{flex:1;min-width:200px}
+.top h1{margin:0;font-size:17px;font-weight:700;letter-spacing:.01em}
+.top .sub{font-size:12px;color:#B9D9F3;font-weight:500}
+.top .acts{display:flex;gap:8px;align-items:center}
+.tbtn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:8px;padding:7px 12px;font-weight:600;font-size:13px;cursor:pointer}
+.tbtn:hover{background:rgba(255,255,255,.2)}
+.tbtn:focus-visible,.btn:focus-visible,select:focus-visible,input:focus-visible,.seg:focus-visible,tr.srow:focus-visible{outline:2px solid #FFC952;outline-offset:2px}
+
+main{max-width:1180px;margin:0 auto;padding:16px 16px 48px}
+.stamp{font-size:12px;color:var(--muted);margin:0 0 12px}
+
+/* filters */
+.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:16px}
+.f{display:flex;flex-direction:column;gap:4px;min-width:140px}
+.f label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.f select{appearance:none;-webkit-appearance:none;background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%237A8494' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat right 10px center;border:1px solid var(--line);border-radius:8px;padding:8px 30px 8px 10px;min-height:38px}
+.btn{background:var(--accent);color:var(--card);border:none;border-radius:8px;padding:9px 14px;font-weight:700;cursor:pointer;min-height:38px}
+.btn.ghost{background:var(--card);color:var(--accent);border:1px solid var(--line)}
+.spacer{flex:1}
+
+/* KPI tiles */
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:16px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.tile .lab{font-size:12px;color:var(--ink2);font-weight:600}
+.tile .val{font-size:30px;font-weight:700;line-height:1.15;margin-top:4px;color:var(--ink)}
+.tile .val small{font-size:15px;color:var(--muted);font-weight:600}
+.tile .note{font-size:12px;color:var(--muted);margin-top:4px}
+.meter{height:6px;background:var(--track);border-radius:4px;margin-top:8px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--accent);border-radius:4px}
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;border-radius:99px;padding:2px 9px;white-space:nowrap}
+.tag .dot{width:8px;height:8px;border-radius:50%;flex:none}
+
+/* cards */
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-bottom:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px}
+.grid2 .card{margin-bottom:0}
+.card h2{margin:0;font-size:15px;font-weight:700;color:var(--ink)}
+.card .desc{font-family:var(--body);font-size:13px;color:var(--ink2);margin:3px 0 12px}
+.empty{font-family:var(--body);color:var(--muted);font-size:13.5px;padding:18px 4px;text-align:center}
+
+/* legend */
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin:0 0 12px;font-size:12px;color:var(--ink2)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+
+/* diverging stacked bars */
+.drow{display:grid;grid-template-columns:150px minmax(0,1fr) 44px;align-items:center;gap:10px;padding:5px 0}
+.drow .nm{font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.drow .nm.tot{font-weight:800}
+.drow .n{font-size:12px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+.dtrack{position:relative;display:grid;grid-template-columns:1fr 1fr;height:22px}
+.dtrack::after{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--ink2);opacity:.55}
+.dside{display:flex;gap:2px;height:100%}
+.dside.l{justify-content:flex-end;padding-right:1px}
+.dside.r{justify-content:flex-start;padding-left:1px}
+.seg{height:100%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-variant-numeric:tabular-nums;cursor:default;min-width:0;overflow:visible;white-space:nowrap}
+.seg:hover{filter:brightness(1.12)}
+.dside.l .seg:first-child{border-radius:4px 0 0 4px}
+.dside.r .seg:last-child{border-radius:0 4px 4px 0}
+.dnone{font-size:12px;color:var(--muted);font-family:var(--body)}
+.axislab{display:grid;grid-template-columns:150px minmax(0,1fr) 44px;gap:10px;font-size:11px;color:var(--muted);margin-top:4px}
+.axislab div:nth-child(2){display:flex;justify-content:space-between}
+details.tv{margin-top:10px}
+details.tv summary{font-size:12px;font-weight:700;color:var(--accent);cursor:pointer}
+
+/* tables */
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -4px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+th.sortable{cursor:pointer;user-select:none}
+th.sortable:hover{color:var(--ink)}
+td{padding:9px 8px;border-bottom:1px solid var(--line2);vertical-align:top}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+tr.srow{cursor:pointer}
+tr.srow:hover td{background:var(--accent-soft)}
+tr.detail td{background:var(--surface);padding:12px 14px}
+.who{font-weight:700;color:var(--ink)}
+.who small{display:block;font-weight:500;color:var(--muted);font-size:12px}
+.mini{display:flex;align-items:center;gap:8px}
+.mini .meter{width:70px;margin:0}
+.status{font-size:12px;font-weight:600;color:var(--ink2);white-space:nowrap}
+.flagpill{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--warn-ink);background:var(--warn-soft);border-radius:99px;padding:2px 9px;white-space:nowrap}
+.search{border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-height:38px;background:var(--card);min-width:220px}
+.dgrid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:16px}
+.dgrid h3{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+.dgrid table{background:var(--card);border:1px solid var(--line);border-radius:8px}
+.kv{font-family:var(--body);font-size:13px;color:var(--ink2);margin:0 0 4px}
+.kv b{font-family:var(--head);color:var(--ink);font-weight:600}
+.notebox{font-family:var(--body);font-size:13px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:4px 0 8px;white-space:pre-wrap}
+
+/* tooltip */
+#tip{position:fixed;z-index:50;pointer-events:none;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.18);padding:8px 10px;font-size:12px;max-width:260px;display:none}
+#tip b{font-size:15px;display:block}
+#tip .k{display:inline-block;width:12px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+
+/* login */
+.login{max-width:420px;margin:56px auto;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px}
+.login h2{margin:0 0 4px;font-size:18px}
+.login p{font-family:var(--body);color:var(--ink2);font-size:14px;margin:0 0 16px}
+.login input[type=password],.login input[type=text]{width:100%;border:1px solid var(--line);border-radius:8px;padding:11px 12px;font-size:16px;background:var(--surface);letter-spacing:.06em;text-transform:uppercase}
+.login .row{display:flex;align-items:center;gap:8px;margin:12px 0 16px;font-size:13px;color:var(--ink2)}
+.login .btn{width:100%}
+.err{color:var(--warn-ink);font-size:13px;font-weight:600;margin-top:10px;min-height:18px}
+.loading{opacity:.55;transition:opacity .2s}
+
+.guide{font-family:var(--body);font-size:12.5px;color:var(--ink2);line-height:1.6}
+footer{max-width:1180px;margin:0 auto;padding:0 16px 32px;font-size:12px;color:var(--muted)}
+
+@media (max-width:900px){
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid2,.dgrid{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:560px){
+  .drow,.axislab{grid-template-columns:92px minmax(0,1fr) 30px;gap:6px}
+  .drow .nm{font-size:12px}
+  .tile .val{font-size:26px}
+  .f{min-width:calc(50% - 5px);flex:1}
+  .search{min-width:0;width:100%}
+  #studentTable .hs{display:none}
+  tr.detail td{padding:10px 6px}
+  tr.detail td>.dgrid{position:sticky;left:0;max-width:calc(100vw - 66px)}
+  .top .in{gap:10px 12px}
+  .top img{height:28px}
+  .top .acts{margin-left:auto}
+  .tbtn{padding:6px 10px;font-size:12.5px}
+  .top .ttl{order:3;flex-basis:100%;min-width:0}
+  .top h1{font-size:15px}
+}
+@media print{
+  .top .acts,.filters .btn,#tip{display:none !important}
+  body{background:#fff}
+  .card,.tile{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="in">
+    <img src="./logo-white.png" alt="Silverleaf Academy">
+    <div class="ttl">
+      <h1>KG Development Checklist · Leadership Dashboard</h1>
+      <div class="sub" id="subline">Live results from the teacher app</div>
+    </div>
+    <div class="acts hidden" id="acts">
+      <button class="tbtn" id="btnRefresh" type="button">Refresh</button>
+      <button class="tbtn" id="btnOut" type="button">Sign out</button>
+    </div>
+  </div>
+</header>
+
+<section class="login hidden" id="loginBox" aria-labelledby="lgT">
+  <h2 id="lgT">Leadership access</h2>
+  <p>Enter the leadership access code. This dashboard shows student records, so the code is for school leaders only — it is different from the teachers' school code.</p>
+  <form id="loginForm" autocomplete="off">
+    <label for="code" class="hidden">Leadership access code</label>
+    <input type="password" id="code" placeholder="SLA-LEAD-····-····" spellcheck="false" autocapitalize="characters">
+    <div class="row"><input type="checkbox" id="remember"><label for="remember">Remember on this device</label></div>
+    <button class="btn" type="submit" id="btnLogin">Open dashboard</button>
+    <div class="err" id="loginErr" role="alert"></div>
+  </form>
+</section>
+
+<main id="dash" class="hidden">
+  <p class="stamp" id="stamp"></p>
+  <div class="filters" role="group" aria-label="Filters">
+    <div class="f"><label for="fRound">Assessment</label>
+      <select id="fRound"><option value="latest">Latest for each student</option><option value="0">Assessment 1</option><option value="1">Assessment 2</option><option value="2">Assessment 3</option></select></div>
+    <div class="f"><label for="fCampus">Campus</label><select id="fCampus"></select></div>
+    <div class="f"><label for="fClass">Class</label><select id="fClass"></select></div>
+    <div class="f"><label for="fTeacher">Teacher</label><select id="fTeacher"></select></div>
+    <div class="spacer"></div>
+    <button class="btn ghost" id="btnCsv" type="button">Download CSV</button>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="grid2">
+    <section class="card" aria-labelledby="h-idx">
+      <h2 id="h-idx">Development Index</h2>
+      <p class="desc" id="d-idx">Share of completed assessments in each band, by campus.</p>
+      <div class="legend" id="lg1"></div>
+      <div id="chartIdx"></div>
+    </section>
+    <section class="card" aria-labelledby="h-dom">
+      <h2 id="h-dom">Domain profile</h2>
+      <p class="desc">Scaled-score bands for each of the seven domains, completed assessments only.</p>
+      <div class="legend" id="lg2"></div>
+      <div id="chartDom"></div>
+    </section>
+  </div>
+
+  <section class="card" aria-labelledby="h-flag">
+    <h2 id="h-flag">Students to follow up</h2>
+    <p class="desc">Development Index in the delay range (79 or below), or any domain showing a significant delay (scaled 1–3). This is a screening signal for support and re-testing — not a diagnosis.</p>
+    <div id="flagList"></div>
+  </section>
+
+  <section class="card" aria-labelledby="h-cls">
+    <h2 id="h-cls">Progress by class</h2>
+    <p class="desc">How far each class has got with the selected assessment.</p>
+    <div id="classTable"></div>
+  </section>
+
+  <section class="card" aria-labelledby="h-rounds">
+    <h2 id="h-rounds">Across the year</h2>
+    <p class="desc">Completed assessments and average Development Index for each assessment round (filters apply).</p>
+    <div id="roundsTable"></div>
+  </section>
+
+  <section class="card" aria-labelledby="h-st">
+    <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;justify-content:space-between">
+      <div><h2 id="h-st">All students</h2><p class="desc" style="margin-bottom:0">Select a student to see domain scores for every assessment.</p></div>
+      <input class="search" id="q" type="search" placeholder="Search student, teacher…" aria-label="Search students">
+    </div>
+    <div style="height:10px"></div>
+    <div id="studentTable"></div>
+  </section>
+
+  <section class="card" aria-labelledby="h-sync">
+    <h2 id="h-sync">Teacher sync activity</h2>
+    <p class="desc">Each phone that has synced, and when it last reached the server. Records stay on the phone until it syncs.</p>
+    <div id="syncTable"></div>
+  </section>
+
+  <section class="card guide" aria-label="How to read the scores">
+    <b style="font-family:var(--head);color:var(--ink)">How to read the scores.</b>
+    Each domain's raw score converts to a scaled score from 1 to 19 using the student's age band (A: 3y1m–4y0m, B: 4y1m–5y0m, C: 5y1m–5y11m):
+    1–3 significant delay · 4–6 slight delay · 7–13 average · 14–16 slightly advanced · 17–19 highly advanced.
+    The seven scaled scores add up to a Development Index (mean 100): 69 or below significant delay · 70–79 slight delay · 80–119 average · 120–129 slightly advanced · 130 or above highly advanced.
+    Scores are counted only when every item of an assessment has been marked.
+  </section>
+</main>
+<footer id="foot" class="hidden">Silverleaf Academy · KG Development Checklist · Student information is confidential — please do not share screenshots outside the leadership team.</footer>
+<div id="tip" role="tooltip"></div>
+
+<script src="./data.js"></script>
+<script>
+"use strict";
+const API = "https://xgmqfkytrxqlosspqsjo.supabase.co/functions/v1/kg-dashboard";
+const D = window.KG_DATA;
+const $ = (id) => document.getElementById(id);
+const esc = (x) => String(x == null ? "" : x).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const CATS = [
+  { key: "sig",  label: "Significant delay" },
+  { key: "sl",   label: "Slight delay" },
+  { key: "avg",  label: "Average" },
+  { key: "adv1", label: "Slightly advanced" },
+  { key: "adv2", label: "Highly advanced" },
+];
+const TOTAL_ITEMS = D.domains.reduce((a, d) => a + d.items.length, 0);
+
+/* ---------- scoring (identical to the teacher app) ---------- */
+function ageParts(dob, test) {
+  if (!dob || !test) return null;
+  const a = new Date(dob), b = new Date(test);
+  if (isNaN(a) || isNaN(b) || b < a) return null;
+  let months = (b.getFullYear() - a.getFullYear()) * 12 + (b.getMonth() - a.getMonth());
+  if (b.getDate() < a.getDate()) months--;
+  return { months, y: Math.floor(months / 12), m: months % 12 };
+}
+function bandOf(m) { if (m >= 37 && m <= 48) return "A"; if (m >= 49 && m <= 60) return "B"; if (m >= 61 && m <= 71) return "C"; return null; }
+function scaledOf(band, dk, raw) { const t = D.scaled[band]; return t && t[dk] && t[dk][raw] !== undefined ? t[dk][raw] : null; }
+function catScaled(s) { if (s <= 3) return 0; if (s <= 6) return 1; if (s <= 13) return 2; if (s <= 16) return 3; return 4; }
+function catIndex(v) { if (v <= 69) return 0; if (v <= 79) return 1; if (v <= 119) return 2; if (v <= 129) return 3; return 4; }
+
+function evalRound(p, k) {
+  const a = (p.assessments && p.assessments[k]) || {};
+  if (!a.date) return { status: "none", k };
+  const mk = (p.marks && p.marks[k]) || {};
+  let done = 0;
+  const doms = D.domains.map(d => {
+    let raw = 0, marked = 0;
+    d.items.forEach(it => { const v = mk[d.key + "." + it.n]; if (v === "y") raw++; if (v === "y" || v === "n") marked++; });
+    done += marked;
+    return { key: d.key, name: d.name, raw, marked, max: d.items.length };
+  });
+  const ap = ageParts(p.dob, a.date);
+  const band = ap ? bandOf(ap.months) : null;
+  const r = { k, date: a.date, examiner: a.examiner || "", ap, band, done, doms, notes: (p.notes && p.notes[k]) || {} };
+  if (done < TOTAL_ITEMS) { r.status = "progress"; return r; }
+  if (!band) { r.status = "outside"; return r; }
+  let sum = 0;
+  doms.forEach(d => { d.scaled = scaledOf(band, d.key, d.raw); d.cat = catScaled(d.scaled); sum += d.scaled; });
+  r.sum = sum;
+  if (sum < 29) { r.index = "<37"; r.indexNum = 36; r.cat = 0; }
+  else if (sum > 98) { r.index = ">138"; r.indexNum = 139; r.cat = 4; }
+  else { r.index = D.standard[sum]; r.indexNum = r.index; r.cat = catIndex(r.index); }
+  r.status = "complete";
+  r.flagReasons = [];
+  if (r.cat <= 1) r.flagReasons.push("Development Index " + r.index + " (" + CATS[r.cat].label.toLowerCase() + ")");
+  const sigD = doms.filter(d => d.cat === 0).map(d => d.name);
+  if (sigD.length) r.flagReasons.push("Significant delay in " + sigD.join(", "));
+  r.watch = doms.filter(d => d.cat === 1).map(d => d.name);
+  r.flagged = r.flagReasons.length > 0;
+  return r;
+}
+function latestK(p) { for (let k = 2; k >= 0; k--) if (p.assessments && p.assessments[k] && p.assessments[k].date) return k; return 0; }
+
+/* ---------- state ---------- */
+let RAW = null, STUDENTS = [], DEVICES = [], openKey = null, sortBy = { col: "name", dir: 1 };
+let CODE = null;
+function getSaved() { try { return localStorage.getItem("kg_lead_code") || sessionStorage.getItem("kg_lead_code"); } catch (e) { return null; } }
+function saveCode(c, remember) { try { (remember ? localStorage : sessionStorage).setItem("kg_lead_code", c); } catch (e) {} }
+function clearCode() { try { localStorage.removeItem("kg_lead_code"); sessionStorage.removeItem("kg_lead_code"); } catch (e) {} }
+
+async function fetchData(code) {
+  const res = await fetch(API, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ leader_code: code }) });
+  const j = await res.json().catch(() => ({}));
+  if (res.status === 403) { const e = new Error(j.error || "Wrong leadership access code"); e.auth = true; throw e; }
+  if (!res.ok || !j.ok) throw new Error(j.error || "Could not load the data (" + res.status + ")");
+  return j;
+}
+
+function ingest(j) {
+  RAW = j;
+  DEVICES = j.devices || [];
+  STUDENTS = (j.records || []).map(r => {
+    const p = r.payload || {};
+    return {
+      key: r.device_id + "|" + r.student_key,
+      device: r.device_id,
+      name: p.name || r.student_name || "(no name)",
+      campus: p.campus || r.campus || "—",
+      cls: p.class || r.class || "—",
+      teacher: r.teacher || "—",
+      sex: p.sex || "", dob: p.dob || "", admission: p.admission || "",
+      synced: r.synced_at, p,
+      rounds: [0, 1, 2].map(k => evalRound(p, k)),
+    };
+  });
+}
+
+/* ---------- filters ---------- */
+function fillSelect(el, label, values) {
+  const cur = el.value;
+  el.innerHTML = '<option value="">' + esc(label) + "</option>" + values.map(v => '<option value="' + esc(v) + '">' + esc(v) + "</option>").join("");
+  if (values.includes(cur)) el.value = cur;
+}
+function buildFilters() {
+  const campuses = [...new Set([...D.campuses, ...STUDENTS.map(s => s.campus)])].filter(c => c && c !== "—");
+  fillSelect($("fCampus"), "All campuses", campuses);
+  fillSelect($("fClass"), "All classes", [...new Set([...D.classes, ...STUDENTS.map(s => s.cls)])].filter(c => c && c !== "—"));
+  const teachers = [...new Set([...STUDENTS.map(s => s.teacher), ...DEVICES.map(d => d.teacher)])].filter(t => t && t !== "—").sort();
+  fillSelect($("fTeacher"), "All teachers", teachers);
+}
+function F() { return { round: $("fRound").value, campus: $("fCampus").value, cls: $("fClass").value, teacher: $("fTeacher").value }; }
+function inScope(s, f) { return (!f.campus || s.campus === f.campus) && (!f.cls || s.cls === f.cls) && (!f.teacher || s.teacher === f.teacher); }
+function roundOf(s, f) { return s.rounds[f.round === "latest" ? latestK(s.p) : +f.round]; }
+function roundLabel(f) { return f.round === "latest" ? "latest assessment" : "Assessment " + (+f.round + 1); }
+
+/* ---------- formatting ---------- */
+function fmtDate(d) { if (!d) return "—"; const x = new Date(d); return isNaN(x) ? "—" : x.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }); }
+function ago(d) {
+  if (!d) return "never"; const s = (Date.now() - new Date(d).getTime()) / 1000;
+  if (s < 90) return "just now"; if (s < 3600) return Math.round(s / 60) + " min ago"; if (s < 86400) return Math.round(s / 3600) + " h ago";
+  const dd = Math.round(s / 86400); return dd + (dd === 1 ? " day ago" : " days ago");
+}
+function pct(a, b) { return b ? Math.round(100 * a / b) : 0; }
+function catTag(c, text) { const k = CATS[c].key; return '<span class="tag"><span class="dot" style="background:var(--c-' + k + ')"></span>' + esc(text || CATS[c].label) + "</span>"; }
+function statusText(r) {
+  if (!r || r.status === "none") return "Not started";
+  if (r.status === "progress") return "In progress · " + pct(r.done, TOTAL_ITEMS) + "%";
+  if (r.status === "outside") return "Age outside 3y1m–5y11m";
+  return "Complete";
+}
+
+/* ---------- tooltip ---------- */
+const tip = $("tip");
+function showTip(html, x, y) { tip.innerHTML = html; tip.style.display = "block"; const w = tip.offsetWidth, h = tip.offsetHeight; tip.style.left = Math.min(window.innerWidth - w - 8, Math.max(8, x + 14)) + "px"; tip.style.top = Math.max(8, y - h - 12) + "px"; }
+function hideTip() { tip.style.display = "none"; }
+
+/* ---------- diverging stacked bar chart ---------- */
+function legendHtml() { return CATS.map(c => '<span><i style="background:var(--c-' + c.key + ')"></i>' + esc(c.label) + "</span>").join(""); }
+function divChart(el, rows, unit) {
+  // rows: [{name, counts:[5], total, bold}]
+  const withData = rows.filter(r => r.total > 0);
+  if (!withData.length) { el.innerHTML = '<div class="empty">No completed assessments for this selection yet. Charts appear once teachers finish and sync an assessment.</div>'; return; }
+  let ext = 0;
+  rows.forEach(r => { if (!r.total) return; const p = r.counts.map(c => 100 * c / r.total); r.p = p; r.left = p[0] + p[1] + p[2] / 2; r.right = p[2] / 2 + p[3] + p[4]; ext = Math.max(ext, r.left, r.right); });
+  ext = Math.max(ext, 10);
+  let html = "";
+  rows.forEach((r, ri) => {
+    html += '<div class="drow"><div class="nm' + (r.bold ? " tot" : "") + '" title="' + esc(r.name) + '">' + esc(r.name) + "</div>";
+    if (!r.total) { html += '<div class="dnone">No completed assessments</div><div class="n">0</div></div>'; return; }
+    const seg = (ci, share, isHalf) => {
+      if (share <= 0) return "";
+      const w = 100 * share / ext;
+      const lbl = isHalf ? "" : Math.round(r.p[ci]) + "%";
+      return '<div class="seg" tabindex="0" data-r="' + ri + '" data-c="' + ci + '" data-lbl="' + lbl + '" style="width:' + w.toFixed(3) + '%;background:var(--c-' + CATS[ci].key + ');color:var(--t-' + CATS[ci].key + ')"></div>';
+    };
+    html += '<div class="dtrack" role="img" aria-label="' + esc(r.name + ": " + CATS.map((c, i) => c.label + " " + r.counts[i]).join(", ")) + '"><div class="dside l">' +
+      seg(0, r.p[0]) + seg(1, r.p[1]) + seg(2, r.p[2] / 2, true) + '</div><div class="dside r">' + seg(2, r.p[2] / 2, true) + seg(3, r.p[3]) + seg(4, r.p[4]) + "</div></div>";
+    html += '<div class="n">' + r.total + "</div></div>";
+  });
+  html += '<div class="axislab"><div></div><div><span>← delay</span><span>average</span><span>advanced →</span></div><div class="n">n</div></div>';
+  html += '<details class="tv"><summary>View as table</summary><div class="tw"><table><thead><tr><th></th>' + CATS.map(c => '<th class="num">' + esc(c.label) + "</th>").join("") + '<th class="num">Total</th></tr></thead><tbody>' +
+    rows.map(r => "<tr><td>" + esc(r.name) + "</td>" + r.counts.map(c => '<td class="num">' + c + "</td>").join("") + '<td class="num">' + r.total + "</td></tr>").join("") + "</tbody></table></div></details>";
+  el.innerHTML = html;
+  fitLabels(el);
+  el.querySelectorAll(".seg").forEach(s => {
+    const r = rows[+s.dataset.r], c = +s.dataset.c;
+    const t = "<b>" + r.counts[c] + " " + unit + (r.counts[c] === 1 ? "" : "s") + " · " + Math.round(r.p[c]) + "%</b>" + '<span class="k" style="background:var(--c-' + CATS[c].key + ')"></span>' + esc(CATS[c].label) + "<br>" + esc(r.name) + " · " + r.total + " total";
+    s.addEventListener("pointermove", e => showTip(t, e.clientX, e.clientY));
+    s.addEventListener("pointerleave", hideTip);
+    s.addEventListener("focus", () => { const b = s.getBoundingClientRect(); showTip(t, b.left + b.width / 2, b.top); });
+    s.addEventListener("blur", hideTip);
+  });
+}
+
+// a label only goes inside a segment when it fits with padding on both sides; otherwise tooltip + table carry it
+const measurer = document.createElement("canvas").getContext("2d");
+function fitLabels(root) {
+  root.querySelectorAll(".seg[data-lbl]").forEach(s => {
+    const t = s.dataset.lbl; if (!t) { s.textContent = ""; return; }
+    measurer.font = "700 11px " + getComputedStyle(s).fontFamily;
+    s.textContent = measurer.measureText(t).width + 10 <= s.getBoundingClientRect().width ? t : "";
+  });
+}
+let rzT = null;
+window.addEventListener("resize", () => { clearTimeout(rzT); rzT = setTimeout(() => { fitLabels($("chartIdx")); fitLabels($("chartDom")); }, 120); });
+
+/* ---------- render ---------- */
+function render() {
+  if (!RAW) return;
+  const f = F();
+  const scope = STUDENTS.filter(s => inScope(s, f));
+  const rs = scope.map(s => ({ s, r: roundOf(s, f) }));
+  const complete = rs.filter(x => x.r.status === "complete");
+  const progress = rs.filter(x => x.r.status === "progress");
+  const flagged = complete.filter(x => x.r.flagged);
+  const avg = complete.length ? Math.round(complete.reduce((a, x) => a + x.r.indexNum, 0) / complete.length) : null;
+
+  // KPIs
+  const classes = new Set(scope.map(s => s.campus + "|" + s.cls)).size;
+  const teachers = new Set(scope.map(s => s.teacher)).size;
+  $("kpis").innerHTML =
+    tile("Students on record", scope.length, (classes ? classes + (classes === 1 ? " class" : " classes") + " · " + teachers + (teachers === 1 ? " teacher" : " teachers") : "No students synced yet")) +
+    '<div class="tile"><div class="lab">Assessed — ' + esc(roundLabel(f)) + '</div><div class="val">' + complete.length + " <small>of " + scope.length + '</small></div><div class="meter" role="img" aria-label="' + pct(complete.length, scope.length) + '% complete"><i style="width:' + pct(complete.length, scope.length) + '%"></i></div><div class="note">' + pct(complete.length, scope.length) + "% complete · " + progress.length + " in progress</div></div>" +
+    '<div class="tile"><div class="lab">Average Development Index</div><div class="val">' + (avg == null ? "—" : avg) + '</div><div class="note">' + (avg == null ? "Needs completed assessments" : catTag(catIndex(avg), CATS[catIndex(avg)].label + " range")) + "</div></div>" +
+    '<div class="tile"><div class="lab">Students to follow up</div><div class="val">' + flagged.length + '</div><div class="note">' + (complete.length ? pct(flagged.length, complete.length) + "% of completed assessments" : "None yet") + "</div></div>";
+
+  // Development Index chart: by campus (or by class when one campus is selected)
+  const byKey = f.campus ? (x => x.s.cls) : (x => x.s.campus);
+  const groups = f.campus ? [...new Set([...D.classes, ...scope.map(s => s.cls)])] : [...new Set([...D.campuses, ...scope.map(s => s.campus)])];
+  const countIdx = list => { const c = [0, 0, 0, 0, 0]; list.forEach(x => c[x.r.cat]++); return c; };
+  const rows1 = [{ name: f.campus ? f.campus + " (all)" : "All campuses", counts: countIdx(complete), total: complete.length, bold: true }]
+    .concat(groups.filter(g => g && g !== "—").map(g => { const l = complete.filter(x => byKey(x) === g); return { name: g, counts: countIdx(l), total: l.length }; }));
+  $("d-idx").textContent = "Share of completed assessments in each band, by " + (f.campus ? "class" : "campus") + ".";
+  divChart($("chartIdx"), rows1, "student");
+
+  // Domain profile
+  const rows2 = D.domains.map(d => { const c = [0, 0, 0, 0, 0]; complete.forEach(x => { const dd = x.r.doms.find(y => y.key === d.key); c[dd.cat]++; }); return { name: d.name, counts: c, total: complete.length }; });
+  divChart($("chartDom"), rows2, "student");
+
+  // Flag list
+  $("flagList").innerHTML = flagged.length ?
+    '<div class="tw"><table><thead><tr><th>Student</th><th>Class</th><th>Teacher</th><th>Tested</th><th class="num">Index</th><th>Why</th></tr></thead><tbody>' +
+    flagged.sort((a, b) => a.r.indexNum - b.r.indexNum).map(x => '<tr><td class="who">' + esc(x.s.name) + '</td><td>' + esc(x.s.campus + " · " + x.s.cls) + "</td><td>" + esc(x.s.teacher) + "</td><td>" + fmtDate(x.r.date) + " · A" + (x.r.k + 1) + '</td><td class="num">' + esc(x.r.index) + "</td><td>" + x.r.flagReasons.map(t => '<span class="flagpill">⚑ ' + esc(t) + "</span>").join(" ") + "</td></tr>").join("") +
+    "</tbody></table></div>" :
+    '<div class="empty">' + (complete.length ? "No students flagged in this selection." : "Nothing to show yet — flags appear once assessments are completed.") + "</div>";
+
+  // Class progress table
+  const cls = {};
+  scope.forEach(s => { const k = s.campus + "|" + s.cls; (cls[k] = cls[k] || { campus: s.campus, cls: s.cls, teachers: new Set(), list: [] }); cls[k].teachers.add(s.teacher); cls[k].list.push(roundOf(s, f)); });
+  const crow = Object.values(cls).sort((a, b) => (a.campus + a.cls).localeCompare(b.campus + b.cls));
+  $("classTable").innerHTML = crow.length ?
+    '<div class="tw"><table><thead><tr><th>Campus · class</th><th>Teacher(s)</th><th class="num">Students</th><th>Complete</th><th class="num">In progress</th><th class="num">Not started</th><th class="num">Avg index</th><th class="num">Follow up</th></tr></thead><tbody>' +
+    crow.map(c => { const done = c.list.filter(r => r.status === "complete"); const a = done.length ? Math.round(done.reduce((s, r) => s + r.indexNum, 0) / done.length) : null;
+      return '<tr><td class="who">' + esc(c.campus) + " · " + esc(c.cls) + "</td><td>" + esc([...c.teachers].join(", ")) + '</td><td class="num">' + c.list.length + '</td><td><div class="mini"><div class="meter"><i style="width:' + pct(done.length, c.list.length) + '%"></i></div><span>' + done.length + " (" + pct(done.length, c.list.length) + '%)</span></div></td><td class="num">' + c.list.filter(r => r.status === "progress").length + '</td><td class="num">' + c.list.filter(r => r.status === "none").length + '</td><td class="num">' + (a == null ? "—" : a) + '</td><td class="num">' + done.filter(r => r.flagged).length + "</td></tr>"; }).join("") +
+    "</tbody></table></div>" : '<div class="empty">No students synced for this selection yet.</div>';
+
+  // Rounds table
+  $("roundsTable").innerHTML = '<div class="tw"><table><thead><tr><th>Round</th><th class="num">Completed</th><th class="num">In progress</th><th class="num">Avg index</th><th class="num">In delay range</th><th class="num">Follow up</th></tr></thead><tbody>' +
+    [0, 1, 2].map(k => { const l = scope.map(s => s.rounds[k]); const d = l.filter(r => r.status === "complete"); const a = d.length ? Math.round(d.reduce((s, r) => s + r.indexNum, 0) / d.length) : null;
+      return "<tr><td class=\"who\">Assessment " + (k + 1) + '</td><td class="num">' + d.length + '</td><td class="num">' + l.filter(r => r.status === "progress").length + '</td><td class="num">' + (a == null ? "—" : a) + '</td><td class="num">' + (d.length ? pct(d.filter(r => r.cat <= 1).length, d.length) + "%" : "—") + '</td><td class="num">' + d.filter(r => r.flagged).length + "</td></tr>"; }).join("") + "</tbody></table></div>";
+
+  renderStudents(f, scope);
+  renderSync(f);
+  $("btnCsv").disabled = !scope.length;
+}
+function tile(lab, val, note) { return '<div class="tile"><div class="lab">' + esc(lab) + '</div><div class="val">' + val + '</div><div class="note">' + esc(note) + "</div></div>"; }
+
+function renderStudents(f, scope) {
+  const q = $("q").value.trim().toLowerCase();
+  let list = scope.filter(s => !q || (s.name + " " + s.teacher + " " + s.campus + " " + s.cls + " " + s.admission).toLowerCase().includes(q)).map(s => ({ s, r: roundOf(s, f) }));
+  const val = (x, c) => c === "name" ? x.s.name.toLowerCase() : c === "cls" ? (x.s.campus + x.s.cls) : c === "teacher" ? x.s.teacher.toLowerCase() :
+    c === "status" ? ({ none: 0, progress: 1, outside: 2, complete: 3 })[x.r.status] : c === "index" ? (x.r.status === "complete" ? x.r.indexNum : -1) : c === "age" ? (x.r.ap ? x.r.ap.months : -1) : 0;
+  list.sort((a, b) => { const va = val(a, sortBy.col), vb = val(b, sortBy.col); return (va < vb ? -1 : va > vb ? 1 : 0) * sortBy.dir; });
+  if (!list.length) { $("studentTable").innerHTML = '<div class="empty">' + (scope.length ? "No students match your search." : "No students synced for this selection yet.") + "</div>"; return; }
+  const th = (c, t, cls) => '<th class="sortable' + (cls ? " " + cls : "") + '" data-col="' + c + '" aria-sort="' + (sortBy.col === c ? (sortBy.dir > 0 ? "ascending" : "descending") : "none") + '">' + t + (sortBy.col === c ? (sortBy.dir > 0 ? " ↑" : " ↓") : "") + "</th>";
+  let h = '<div class="tw"><table><thead><tr>' + th("name", "Student") + th("cls", "Campus · class") + th("teacher", "Teacher", "hs") + th("age", "Age · band", "hs") + th("status", "Status") + th("index", "Index", "num") + "<th>Band</th></tr></thead><tbody>";
+  list.forEach(x => {
+    const r = x.r, open = openKey === x.s.key;
+    h += '<tr class="srow" tabindex="0" data-key="' + esc(x.s.key) + '" aria-expanded="' + open + '"><td class="who">' + esc(x.s.name) + (r.flagged ? ' <span class="flagpill" title="Flagged for follow-up">⚑</span>' : "") + "</td><td>" + esc(x.s.campus + " · " + x.s.cls) + "</td><td class=\"hs\">" + esc(x.s.teacher) + "</td><td class=\"hs\">" +
+      (r.ap ? r.ap.y + "y " + r.ap.m + "m" + (r.band ? " · " + r.band : "") : "—") + '</td><td class="status">' + esc(statusText(r)) + '</td><td class="num">' + (r.status === "complete" ? esc(r.index) : "—") + "</td><td>" + (r.status === "complete" ? catTag(r.cat) : "") + "</td></tr>";
+    if (open) h += '<tr class="detail"><td colspan="7">' + detailHtml(x.s) + "</td></tr>";
+  });
+  h += "</tbody></table></div>";
+  $("studentTable").innerHTML = h;
+  $("studentTable").querySelectorAll("th.sortable").forEach(t => t.addEventListener("click", () => { const c = t.dataset.col; sortBy = { col: c, dir: sortBy.col === c ? -sortBy.dir : 1 }; renderStudents(F(), STUDENTS.filter(s => inScope(s, F()))); }));
+  $("studentTable").querySelectorAll("tr.srow").forEach(tr => {
+    const tog = () => { openKey = openKey === tr.dataset.key ? null : tr.dataset.key; renderStudents(F(), STUDENTS.filter(s => inScope(s, F()))); const n = $("studentTable").querySelector('tr.srow[data-key="' + CSS.escape(tr.dataset.key) + '"]'); if (n) n.focus(); };
+    tr.addEventListener("click", tog);
+    tr.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); tog(); } });
+  });
+}
+
+function detailHtml(s) {
+  const rs = s.rounds;
+  const cell = (r, d) => { if (r.status === "none") return "—"; const dd = r.doms.find(y => y.key === d.key); if (r.status !== "complete") return dd.raw + "/" + dd.max + (dd.marked < dd.max ? "*" : ""); return dd.raw + " → <b>" + dd.scaled + "</b>"; };
+  let t = '<table><thead><tr><th>Domain</th>' + rs.map(r => '<th class="num">A' + (r.k + 1) + (r.date ? " · " + fmtDate(r.date) : "") + "</th>").join("") + "</tr></thead><tbody>";
+  D.domains.forEach(d => { t += "<tr><td>" + esc(d.name) + "</td>" + rs.map(r => '<td class="num">' + cell(r, d) + "</td>").join("") + "</tr>"; });
+  t += '<tr><td><b>Development Index</b></td>' + rs.map(r => '<td class="num">' + (r.status === "complete" ? "<b>" + esc(r.index) + "</b>" : esc(r.status === "none" ? "—" : statusText(r))) + "</td>").join("") + "</tr></tbody></table>";
+  let side = '<p class="kv"><b>Sex:</b> ' + esc(s.sex || "—") + " · <b>Date of birth:</b> " + fmtDate(s.dob) + (s.admission ? " · <b>Adm. no:</b> " + esc(s.admission) : "") + "</p>" +
+    '<p class="kv"><b>Teacher:</b> ' + esc(s.teacher) + " · <b>Last synced:</b> " + ago(s.synced) + "</p>";
+  rs.forEach(r => {
+    if (r.status === "none") return;
+    side += '<p class="kv" style="margin-top:10px"><b>Assessment ' + (r.k + 1) + ":</b> " + fmtDate(r.date) + (r.ap ? " · age " + r.ap.y + "y " + r.ap.m + "m" : "") + (r.band ? " · band " + r.band : "") + (r.examiner ? " · examiner " + esc(r.examiner) : "") + "</p>";
+    if (r.status === "complete") {
+      side += '<p class="kv">' + catTag(r.cat, "Index " + r.index + " · " + CATS[r.cat].label) + "</p>";
+      if (r.flagReasons.length) side += '<p class="kv">' + r.flagReasons.map(x => '<span class="flagpill">⚑ ' + esc(x) + "</span>").join(" ") + "</p>";
+      if (r.watch.length) side += '<p class="kv"><b>Slight delay:</b> ' + esc(r.watch.join(", ")) + "</p>";
+    } else side += '<p class="kv">' + esc(statusText(r)) + (r.status === "progress" ? " (" + r.done + " of " + TOTAL_ITEMS + " items marked)" : "") + "</p>";
+    if (r.notes && r.notes.followup) side += '<p class="kv"><b>Follow-up agreed with parent:</b></p><div class="notebox">' + esc(r.notes.followup) + "</div>";
+  });
+  return '<div class="dgrid"><div><h3>Raw → scaled score by assessment</h3><div class="tw">' + t + '</div>' + (rs.some(r => r.status === "progress") ? '<p class="kv" style="font-size:12px">* not all items marked yet</p>' : "") + '</div><div><h3>Details</h3>' + side + "</div></div>";
+}
+
+function renderSync(f) {
+  const devs = DEVICES.filter(d => (!f.campus || d.campus === f.campus) && (!f.cls || d.class === f.cls) && (!f.teacher || d.teacher === f.teacher));
+  if (!devs.length) { $("syncTable").innerHTML = '<div class="empty">No teacher phones have synced for this selection yet.</div>'; return; }
+  devs.sort((a, b) => new Date(b.last_seen) - new Date(a.last_seen));
+  $("syncTable").innerHTML = '<div class="tw"><table><thead><tr><th>Teacher</th><th>Campus · class</th><th class="num">Students synced</th><th class="num">Assessments complete</th><th>Last sync</th><th>Set up</th></tr></thead><tbody>' +
+    devs.map(d => { const mine = STUDENTS.filter(s => s.device === d.device_id); const doneN = mine.reduce((a, s) => a + s.rounds.filter(r => r.status === "complete").length, 0); const stale = (Date.now() - new Date(d.last_seen).getTime()) > 14 * 86400000;
+      return '<tr><td class="who">' + esc(d.teacher || "—") + "</td><td>" + esc((d.campus || "—") + " · " + (d.class || "—")) + '</td><td class="num">' + mine.length + '</td><td class="num">' + doneN + "</td><td>" + esc(ago(d.last_seen)) + (stale ? ' <span class="flagpill" title="No sync for over 2 weeks">over 2 weeks</span>' : "") + "</td><td>" + fmtDate(d.created_at) + "</td></tr>"; }).join("") +
+    "</tbody></table></div>";
+}
+
+/* ---------- CSV ---------- */
+function csv() {
+  const f = F();
+  const scope = STUDENTS.filter(s => inScope(s, f));
+  const head = ["Student", "Admission no", "Campus", "Class", "Teacher", "Sex", "Date of birth", "Assessment", "Date tested", "Examiner", "Age (months)", "Band", "Status", "Items marked"]
+    .concat(...D.domains.map(d => [d.name + " raw", d.name + " scaled"]), ["Sum of scaled", "Development Index", "Interpretation", "Follow up", "Reasons"]);
+  const rows = [head];
+  scope.forEach(s => {
+    const ks = f.round === "latest" ? [0, 1, 2] : [+f.round];
+    ks.forEach(k => { const r = s.rounds[k]; if (r.status === "none" && f.round === "latest") return;
+      rows.push([s.name, s.admission, s.campus, s.cls, s.teacher, s.sex, s.dob, "Assessment " + (k + 1), r.date || "", r.examiner || "", r.ap ? r.ap.months : "", r.band || "", statusText(r), r.done || 0]
+        .concat(...D.domains.map(d => { const dd = r.doms && r.doms.find(y => y.key === d.key); return [dd ? dd.raw : "", dd && dd.scaled != null ? dd.scaled : ""]; }),
+        [r.sum != null ? r.sum : "", r.index != null ? r.index : "", r.status === "complete" ? CATS[r.cat].label : "", r.flagged ? "Yes" : "", (r.flagReasons || []).join("; ")]));
+    });
+  });
+  const body = rows.map(row => row.map(v => { v = String(v == null ? "" : v); if (/^[=+\-@]/.test(v)) v = "'" + v; return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(",")).join("\r\n");
+  const blob = new Blob(["\uFEFF" + body], { type: "text/csv;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "Silverleaf KG Checklist - " + (f.campus || "All campuses") + " - " + new Date().toISOString().slice(0, 10) + ".csv";
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+
+/* ---------- flow ---------- */
+function showLogin(msg) {
+  $("loginBox").classList.remove("hidden"); $("dash").classList.add("hidden"); $("acts").classList.add("hidden"); $("foot").classList.add("hidden");
+  $("loginErr").textContent = msg || ""; setTimeout(() => $("code").focus(), 50);
+}
+function showDash() {
+  $("loginBox").classList.add("hidden"); $("dash").classList.remove("hidden"); $("acts").classList.remove("hidden"); $("foot").classList.remove("hidden");
+}
+function stampText() {
+  if (!RAW) return;
+  const n = STUDENTS.length, t = DEVICES.length;
+  $("stamp").textContent = "Data as of " + new Date(RAW.generated_at).toLocaleString("en-GB", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) + " (" + ago(RAW.generated_at) + ") · " + n + " student record" + (n === 1 ? "" : "s") + " from " + t + " teacher phone" + (t === 1 ? "" : "s");
+}
+async function load(code, opts) {
+  opts = opts || {};
+  $("dash").classList.add("loading");
+  try {
+    const j = await fetchData(code);
+    CODE = code; ingest(j); buildFilters(); showDash(); render(); stampText();
+    return true;
+  } catch (e) {
+    if (e.auth) { clearCode(); CODE = null; showLogin(e.message); }
+    else if (opts.fromLogin) $("loginErr").textContent = "Could not reach the server — check the internet connection and try again.";
+    else $("stamp").textContent = "⚠ Could not refresh — showing the last loaded data. " + (RAW ? "" : "");
+    return false;
+  } finally { $("dash").classList.remove("loading"); }
+}
+
+$("loginForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const c = $("code").value.trim().toUpperCase();
+  if (!c) { $("loginErr").textContent = "Enter the leadership access code."; return; }
+  $("btnLogin").disabled = true; $("btnLogin").textContent = "Checking…"; $("loginErr").textContent = "";
+  const ok = await load(c, { fromLogin: true });
+  $("btnLogin").disabled = false; $("btnLogin").textContent = "Open dashboard";
+  if (ok) { saveCode(c, $("remember").checked); $("code").value = ""; }
+});
+$("btnRefresh").addEventListener("click", () => { if (CODE) load(CODE); });
+$("btnOut").addEventListener("click", () => { clearCode(); CODE = null; RAW = null; STUDENTS = []; DEVICES = []; showLogin(""); });
+["fRound", "fCampus", "fClass", "fTeacher"].forEach(id => $(id).addEventListener("change", () => { openKey = null; render(); }));
+$("q").addEventListener("input", () => renderStudents(F(), STUDENTS.filter(s => inScope(s, F()))));
+$("btnCsv").addEventListener("click", csv);
+window.addEventListener("scroll", hideTip, { passive: true });
+setInterval(() => { stampText(); if (CODE && document.visibilityState === "visible") load(CODE); }, 5 * 60 * 1000);
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && CODE && RAW && Date.now() - new Date(RAW.generated_at).getTime() > 5 * 60 * 1000) load(CODE); });
+
+$("lg1").innerHTML = legendHtml(); $("lg2").innerHTML = legendHtml();
+(function start() { const c = getSaved(); if (c) load(c).then(ok => { if (!ok && !RAW) showLogin(""); }); else showLogin(""); })();
+</script>
+</body>
+</html>
